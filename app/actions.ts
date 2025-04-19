@@ -4,16 +4,22 @@
 import { serverEnv } from '@/env/server';
 import { SearchGroupId } from '@/lib/utils';
 import { openai } from '@ai-sdk/openai';
-import { generateObject } from 'ai';
+import { generateObject, wrapLanguageModel, extractReasoningMiddleware } from 'ai';
 import { z } from 'zod';
+import { deepinfra } from '@ai-sdk/deepinfra';
 
 export async function suggestQuestions(history: any[]) {
     'use server';
 
-    console.log(history);
+    const middleware = extractReasoningMiddleware({
+      tagName: 'think',
+    });
 
     const { object } = await generateObject({
-        model: openai('gpt-4.1-nano-2025-04-14'),
+        model: wrapLanguageModel({
+          model: deepinfra('Qwen/Qwen2.5-72B-Instruct'),
+          middleware,
+      }),
         temperature: 0,
         maxTokens: 300,
         topP: 0.3,

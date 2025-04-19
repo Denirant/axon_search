@@ -50,6 +50,17 @@ const XAIIcon = ({ className }: { className?: string }) => (
 
 const models = [
     {
+        value: 'scira-qwen',
+        label: 'Qwen 2.5',
+        icon: '/google.svg',
+        iconClass: '!text-neutral-300',
+        description: 'Qwen efficient model',
+        color: 'purple',
+        vision: false,
+        experimental: false,
+        category: 'Free',
+    },
+    {
         value: 'scira-default',
         label: 'GPT 4.1 Nano',
         icon: '/openai.svg',
@@ -79,17 +90,6 @@ const models = [
         description: 'Mini reasoning model',
         color: 'gray',
         vision: true,
-        experimental: false,
-        category: 'Stable',
-    },
-    {
-        value: 'scira-qwen',
-        label: 'Qwen 2.5',
-        icon: '/google.svg',
-        iconClass: '!text-neutral-300',
-        description: 'Qwen efficient model',
-        color: 'purple',
-        vision: false,
         experimental: false,
         category: 'Stable',
     },
@@ -191,7 +191,7 @@ const ModelSwitcher: React.FC<ModelSwitcherProps> = ({
 
     // Only show divider if we have multiple categories and no attachments
     const showDivider = (category: string) => {
-        return !hasAttachments && showExperimentalModels && category === 'Stable';
+        return !hasAttachments && showExperimentalModels && (category === 'Free' || category === 'Research');
     };
 
     return (
@@ -303,9 +303,9 @@ const ModelSwitcher: React.FC<ModelSwitcherProps> = ({
                                 </DropdownMenuItem>
                             ))}
                         </div>
-                        {/* {showDivider(category) && (
-                            <div className="my-1 border-t border-neutral-200 dark:border-neutral-800" />
-                        )} */}
+                        {showDivider(category) && (
+                            <div className="my-1 w-[80%] mx-auto border-t border-neutral-200 dark:border-neutral-800" />
+                        )}
                     </div>
                 ))}
             </DropdownMenuContent>
