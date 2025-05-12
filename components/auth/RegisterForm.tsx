@@ -27,14 +27,15 @@ export default function RegisterForm() {
         color: 'bg-gray-200 dark:bg-gray-700',
     });
 
-    const { login, loginWithGoogle, loginWithVK, loading, error, clearError, user } = useAuth();
+    const { register, loading, error, clearError, user } = useAuth();
 
     const router = useRouter();
 
-    if(user) {
-        router.push('/');
-        return;
-    }
+    useEffect(() => {
+        if (user) {
+            router.push('/');
+        }
+    }, [user, router]);
 
     // Валидация надежности пароля
     useEffect(() => {
@@ -127,12 +128,16 @@ export default function RegisterForm() {
 
     return (
         <div className="flex min-h-[100vh] flex-col justify-center px-6 py-12 lg:px-8">
-            <div className='fixed top-0 left-0 w-full p-7'>
+            <div className="fixed top-0 left-0 w-full p-7">
                 <Link href="/">
-                    <img className='select-none w-10 h-10 p-0.5 border-[3px] border-neutral-100 rounded-full' src="./axon.svg" alt="" />
+                    <img
+                        className="select-none w-10 h-10 p-0.5 border-[3px] border-neutral-100 rounded-full"
+                        src="./axon.svg"
+                        alt=""
+                    />
                 </Link>
             </div>
-            
+
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white">
                     Новый аккаунт
@@ -307,8 +312,7 @@ export default function RegisterForm() {
                                 htmlFor="confirmPassword"
                                 className={`absolute left-3.5 text-sm top-1/2 -translate-y-1/2 text-neutral-500 bg-white dark:bg-neutral-800 rounded-lg transition-all duration-200 px-2
                                     peer-focus:text-[11px] peer-focus:text-neutral-800 dark:peer-focus:text-neutral-200 peer-focus:top-0 peer-focus:-translate-y-1/2
-                                    peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:-translate-y-1/2`
-                                }
+                                    peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:-translate-y-1/2`}
                             >
                                 Проверочный пароль
                             </label>
