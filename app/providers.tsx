@@ -19,7 +19,7 @@ if (typeof window !== 'undefined') {
 export function Providers({ children }: { children: ReactNode }) {
     return (
         <PostHogProvider client={posthog}>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <ThemeProvider attribute="class" defaultTheme="light">
                 <AuthProvider>
                     <ChatProvider>
                         {children}
