@@ -1,0 +1,69 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider = "postgresql" // или другая БД по вашему выбору
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                  String    @id @default(cuid())
+  email               String    @unique
+  password            String?
+  name                String?
+  image               String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  resetPasswordCode   String?
+  resetPasswordExpires DateTime?
+  authProvider        String?
+
+  chats               Chat[]
+
+  @@map("users") // обратите внимание на регистр таблицы
+}
+
+model Chat {
+  id           String    @id @default(cuid())
+  userId       String
+  title        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  messages     Message[]
+
+  user         User      @relation(fields: [userId], references: [id])
+  
+  @@map("chats") // обратите внимание на регистр таблицы
+}
+
+// Обновления не требуются, текущая схема корректна:
+model Message {
+  id            String       @id @default(cuid())
+  chatId        String
+  role          String
+  content       String       @db.Text
+  rawJson       Json?
+  createdAt     DateTime     @default(now())
+  
+  chat          Chat         @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  attachments   Attachment[]
+  
+  @@map("messages")
+}
+
+model Attachment {
+  id            String   @id @default(cuid())
+  messageId     String
+  name          String
+  contentType   String
+  url           String
+  size          Int
+  createdAt     DateTime @default(now())
+  
+  message       Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  
+  @@map("attachments") // обратите внимание на регистр таблицы
+}
